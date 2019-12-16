@@ -53,5 +53,6 @@ public class Calculator {
 
               output = String.valueOf(operation(input));             
               System.out.println(output);
+              in.close();
               }
        }
