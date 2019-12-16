@@ -1,2 +1,13 @@
+v0.4
+Ability to add an arbitary number of doubles
+Ability to subtract an arbitary number of doubles
+
+v0.3
+Automatic operator detection -> Mix and Match operations
+Improved regex, removing 'over 10 digit' bugs
+
+v0.2
+Ability to divide an arbitary number of doubles
+
 v0.1
 Ability to multiply an arbitary number of doubles.
