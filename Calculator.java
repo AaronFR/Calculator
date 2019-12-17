@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Scanner;
  
@@ -11,23 +12,42 @@ public class Calculator {
        public static Double operation(
               String input
        ){
+
+              
               String[] blocks = input.split("[-+*/^]");  // format to list of characters
-              String[] operators = input.split("[^-+*/^]+");
+              ArrayList<String> operators = new ArrayList<String>(
+                     Arrays.asList(input.split("[^-+*/^]+"))
+              );
 
-              double result = 1;
+              boolean isNegative = false;
+              if (operators.get(0).equals("-")){
+                     operators.set(0, "");
+                     blocks = Arrays.copyOfRange(blocks, 1, blocks.length);
+                     isNegative = true;
+              }
+              
               int index = 0; // enumerate these
-
+              double result = 1;
               for (String block : blocks){
+                     System.out.println("Block: " + block);
                      if (index == 0){
-                            result = Double.valueOf(block);
+                            if (isNegative){
+                                   result = -Double.valueOf(blocks[0]);
+                            }
+                            else{
+                                   result = Double.valueOf(block);
+                            }
+                            
                      }
                      else{
-                            String operator = operators[index];
+                            String operator = operators.get(index);
                             if (operator.equals("+")){
                                    result += Double.valueOf(block); 
                             }
                             if (operator.equals("-")){
+                                   System.out.println("b" + result);
                                    result -= Double.valueOf(block); 
+                                   System.out.println("a" + result);
                             }
                             if (operator.equals("*")){
                                    result *= Double.valueOf(block); 
