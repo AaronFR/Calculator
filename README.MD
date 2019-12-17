@@ -5,6 +5,7 @@
 - Using Try-Catches to create a robust program
 - Integrate direcltly with git through VSC (for frequent commiting)
 
+
 #### Functionality
 - Addition `+`
 - Subtraction `-`
@@ -21,5 +22,18 @@ All numbers are represented as doubles.
 
 To exit enter `quit`.
 
+
+### Examples
+Method | Result 
+--- | ---
+10 + 10 | 20.0
+5 - 8 | -3.0
+10^2^2 | 10000.0
+7 / 2 | 3.5
+d/dx 4x^2 | 8.0x^1.0
+d/dVolume 2Volume^3 | 6.0Volume^2.0
+
+
 #### Features that could be developed
 - Full error catching, fails if d/d is entered for derivative or if random characters added.
+- Divide by negative numbers

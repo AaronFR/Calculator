@@ -10,21 +10,24 @@ public class Calculator {
        public static Double operation(
               String input
        ) {
-              
+              input = input.replace(" ", "");
+
               String operationsString = "-+*/^";
               String[] blocks = input.split(
                      String.format("[%s]", operationsString)
               );
-              ArrayList<String> operators = new ArrayList<String>(
-                     Arrays.asList(input.split(
-                            String.format("[^%s]", operationsString))
-                     )
-              );
-              operators.remove(0);
+
+              ArrayList<String> operators = new ArrayList<String>();
+              char[] inputChars = input.toCharArray();
+              for (char c: inputChars) {
+                     String s = String.valueOf(c);
+                     if (s.equals("^") || s.equals("-") || s.equals("+") || s.equals("*") || s.equals("/")) {
+                            operators.add(s);
+                     }
+              }
 
               boolean isNegative = false;
-              if (operators.get(0).equals("-")) {
-                     operators.set(0, "");
+              if (input.startsWith("-")) {
                      blocks = Arrays.copyOfRange(blocks, 1, blocks.length);
                      isNegative = true;
               }
@@ -43,14 +46,12 @@ public class Calculator {
                                    
                             }
                             else{
-                                   String operator = operators.get(index);
+                                   String operator = operators.get(index - 1);
                                    if (operator.equals("+")) {
                                           result += Double.valueOf(block); 
                                    }
                                    if (operator.equals("-")) {
-                                          System.out.println("b" + result);
-                                          result -= Double.valueOf(block); 
-                                          System.out.println("a" + result);
+                                          result -= Double.valueOf(block);
                                    }
                                    if (operator.equals("*")) {
                                           result *= Double.valueOf(block); 
