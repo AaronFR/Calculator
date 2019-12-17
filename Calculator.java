@@ -20,6 +20,7 @@ public class Calculator {
                             String.format("[^%s]", operationsString))
                      )
               );
+              operators.remove(0);
 
               boolean isNegative = false;
               if (operators.get(0).equals("-")) {
@@ -120,7 +121,6 @@ public class Calculator {
        public static void calculatorInput() {
               Scanner in = new Scanner(System.in);
               String input = in.nextLine();
-              // input = input.replaceAll("", "");
               String output = ": " + input;
 
               if (!input.toLowerCase().equals("quit")) {

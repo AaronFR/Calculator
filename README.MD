@@ -21,6 +21,5 @@ All numbers are represented as doubles.
 
 To exit enter `quit`.
 
-#### Features to develop
-- fix multiple arbitary failing after 2
-- Derivatives
+#### Features that could be developed
+- Full error catching, fails if d/d is entered for derivative or if random characters added.
