@@ -13,10 +13,14 @@ public class Calculator {
               String input
        ){
 
-              
-              String[] blocks = input.split("[-+*/^]");  // format to list of characters
+              String operationsString = "-+*/^";
+              String[] blocks = input.split(
+                     String.format("[%s]", operationsString)
+              );
               ArrayList<String> operators = new ArrayList<String>(
-                     Arrays.asList(input.split("[^-+*/^]+"))
+                     Arrays.asList(input.split(
+                            String.format("[^%s]", operationsString))
+                     )
               );
 
               boolean isNegative = false;
@@ -26,7 +30,7 @@ public class Calculator {
                      isNegative = true;
               }
               
-              int index = 0; // enumerate these
+              int index = 0;
               double result = 1;
               for (String block : blocks){
                      System.out.println("Block: " + block);
