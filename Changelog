@@ -1,3 +1,10 @@
+v0.7
+Implemented simple polynomial derivatives (format ax^n) for any arbitary string variable x
+
+v0.6
+Looping functionality: Calculator will keep running till quit
+Error catching, Calculator will report non-sensible input
+
 v0.5.1
 Minor code improvements
 

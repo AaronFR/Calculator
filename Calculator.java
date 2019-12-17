@@ -3,16 +3,14 @@ import java.util.ArrayList;
 import java.util.Scanner;
  
 public class Calculator {
-        
-       public static double multiplyEquals(double result, double block){
-              result *= Double.valueOf(block);
-              return result;
-       }
+
+       public static boolean hasFailed = false;
+       public static String internalErrorMessage = new String();
 
        public static Double operation(
               String input
-       ){
-
+       ) {
+              
               String operationsString = "-+*/^";
               String[] blocks = input.split(
                      String.format("[%s]", operationsString)
@@ -24,7 +22,7 @@ public class Calculator {
               );
 
               boolean isNegative = false;
-              if (operators.get(0).equals("-")){
+              if (operators.get(0).equals("-")) {
                      operators.set(0, "");
                      blocks = Arrays.copyOfRange(blocks, 1, blocks.length);
                      isNegative = true;
@@ -32,51 +30,124 @@ public class Calculator {
               
               int index = 0;
               double result = 1;
-              for (String block : blocks){
-                     System.out.println("Block: " + block);
-                     if (index == 0){
-                            if (isNegative){
-                                   result = -Double.valueOf(blocks[0]);
+              for (String block : blocks) {
+                     try {
+                            if (index == 0) {
+                                   if (isNegative) {
+                                          result = -Double.valueOf(blocks[0]);
+                                   }
+                                   else{
+                                          result = Double.valueOf(block);
+                                   }
+                                   
                             }
                             else{
-                                   result = Double.valueOf(block);
+                                   String operator = operators.get(index);
+                                   if (operator.equals("+")) {
+                                          result += Double.valueOf(block); 
+                                   }
+                                   if (operator.equals("-")) {
+                                          System.out.println("b" + result);
+                                          result -= Double.valueOf(block); 
+                                          System.out.println("a" + result);
+                                   }
+                                   if (operator.equals("*")) {
+                                          result *= Double.valueOf(block); 
+                                   }
+                                   if (operator.equals("/")) {
+                                          result /= Double.valueOf(block); 
+                                   }
+                                   if (operator.equals("^")) {
+                                          result = Math.pow(result, Double.valueOf(block)); 
+                                   }
                             }
-                            
+                            index++;
+                     } catch (Exception e) {
+                            hasFailed = true;
+                            System.out.println(
+                                   "INVALID: DIGITS EXPECTED!" +
+                                   " >   " + e
+                            );
                      }
-                     else{
-                            String operator = operators.get(index);
-                            if (operator.equals("+")){
-                                   result += Double.valueOf(block); 
-                            }
-                            if (operator.equals("-")){
-                                   System.out.println("b" + result);
-                                   result -= Double.valueOf(block); 
-                                   System.out.println("a" + result);
-                            }
-                            if (operator.equals("*")){
-                                   result *= Double.valueOf(block); 
-                            }
-                            if (operator.equals("/")){
-                                   result /= Double.valueOf(block); 
-                            }
-                            if (operator.equals("^")){
-                                   result = Math.pow(result, Double.valueOf(block)); 
-                            }
-                            
-                     }
-                     index++;
+                     
               }
 
               return result;
        }
-    
-       public static void main(String[] args) {
+
+       public static String derivative(String input) {
+              String result = new String();
+
+              String[] variableBlocks = input.split("d\\/d");
+              String[] variableStatements = variableBlocks[1].split(" ");
+              String variable = variableStatements[0];
+              String[] terms = variableStatements[1].split(variable);
+
+              Double constant = Double.valueOf(terms[0]);
+              boolean isConstant = false;
+              if (terms.length == 1){
+                     if (variableStatements[1].endsWith(variable)) {
+                            return String.valueOf(constant);
+                     }
+                     else {
+                            return "0";
+                     }
+              }
+
+              if (terms[1].startsWith("^")) {
+                     String[] splitByExponent = terms[1].split("\\^");
+                     Double exponent = Double.valueOf(splitByExponent[1]);
+
+                     if (exponent != 0 || !isConstant) {
+                            constant *= exponent;
+                            exponent--;
+
+                            result = String.valueOf(constant) + variable + "^" + String.valueOf(exponent);
+                     }
+                     else {
+                            result = "0";
+                     }
+                     
+              }
+              else {
+                     hasFailed = true;
+                     System.out.println("EXPONENT NOT FOUND");
+              }
+
+              return result;
+       }
+
+       public static void calculatorInput() {
               Scanner in = new Scanner(System.in);
               String input = in.nextLine();
+              // input = input.replaceAll("", "");
               String output = ": " + input;
 
-              output = String.valueOf(operation(input));             
-              System.out.println(output);
-              in.close();
+              if (!input.toLowerCase().equals("quit")) {
+                     if (input.startsWith("d/d")) {
+                            output = derivative(input);
+                     }
+                     else {
+                            output = String.valueOf(operation(input));     
+                     }
+                     
+                     if (hasFailed) {
+                            System.out.println();
+                     }
+                     else {
+                            System.out.println(output);
+                            System.out.println();
+                     }
+                     hasFailed = false;
+
+                     calculatorInput();
+              }
+              else{
+                     in.close();
               }
        }
+    
+       public static void main(String[] args) {
+              calculatorInput();
+       }
+}
