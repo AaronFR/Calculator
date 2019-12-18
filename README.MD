@@ -30,11 +30,13 @@ Method | Result
 5 - 8 | -3.0
 10^2^2 | 10000.0
 7 / 2 | 3.5
-5 + 10 - 2 * 7 / 3 ^ 1.5 | 167.063...
+5+10-2*7/3^1.5 | 167.063...
 d/dx 4x^2 | 8.0x^1.0
 d/dVolume 2Volume^3 | 6.0Volume^2.0
 
 
 #### Features that could be developed
-- Full error catching, fails if d/d is entered for derivative or if random characters added.
+- Full error catching, fails if d/d is entered for derivative on its own or if a string of random characters are added
 - Divide by negative numbers
+- take negative powers
+- Bug: exponenting a negative number act like subtraction
