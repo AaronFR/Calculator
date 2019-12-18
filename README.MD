@@ -11,7 +11,7 @@
 - Subtraction `-`
 - Multiplication `*`
 - Division `/`
-- Exponentaion `^`
+- Exponentiation `^`
 - Derivatives `d/dx ax^n` 
     - where x is any string, a and n are digits
 
