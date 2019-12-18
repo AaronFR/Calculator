@@ -39,4 +39,4 @@ d/dVolume 2Volume^3 | 6.0Volume^2.0
 - Full error catching, fails if d/d is entered for derivative on its own or if a string of random characters are added
 - Divide by negative numbers
 - Take negative powers
-- Bug: exponenting a negative number act like subtraction
+- Bug: exponenting a negative number acts like subtraction
