@@ -1,3 +1,9 @@
+v1.0
+Complete internal change to parse operators and numbers simutaneously. 
+All terms in a query must be spaced apart, but said querys are now rebost and without suprising errors.
+Can freely divide by negative numbers for instance.
+
+
 v0.7
 Implemented simple polynomial derivatives (format ax^n) for any arbitary string variable x
 
