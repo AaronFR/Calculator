@@ -1,4 +1,4 @@
-import java.util.Arrays;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Scanner;
  
@@ -6,76 +6,24 @@ public class Calculator {
 
        public static boolean hasFailed = false;
        public static String internalErrorMessage = new String();
-
-       public static Double operation(
-              String input
-       ) {
-              input = input.replace(" ", "");
-
-              String operationsString = "-+*/^";
-              String[] blocks = input.split(
-                     String.format("[%s]", operationsString)
-              );
-
-              ArrayList<String> operators = new ArrayList<String>();
-              char[] inputChars = input.toCharArray();
-              for (char c: inputChars) {
-                     String s = String.valueOf(c);
-                     if (s.equals("^") || s.equals("-") || s.equals("+") || s.equals("*") || s.equals("/")) {
-                            operators.add(s);
-                     }
-              }
-
-              boolean isNegative = false;
-              if (input.startsWith("-")) {
-                     blocks = Arrays.copyOfRange(blocks, 1, blocks.length);
-                     isNegative = true;
-              }
-              
-              int index = 0;
-              double result = 1;
-              for (String block : blocks) {
-                     try {
-                            if (index == 0) {
-                                   if (isNegative) {
-                                          result = -Double.valueOf(blocks[0]);
-                                   }
-                                   else{
-                                          result = Double.valueOf(block);
-                                   }
-                                   
-                            }
-                            else{
-                                   String operator = operators.get(index - 1);
-                                   if (operator.equals("+")) {
-                                          result += Double.valueOf(block); 
-                                   }
-                                   if (operator.equals("-")) {
-                                          result -= Double.valueOf(block);
-                                   }
-                                   if (operator.equals("*")) {
-                                          result *= Double.valueOf(block); 
-                                   }
-                                   if (operator.equals("/")) {
-                                          result /= Double.valueOf(block); 
-                                   }
-                                   if (operator.equals("^")) {
-                                          result = Math.pow(result, Double.valueOf(block)); 
-                                   }
-                            }
-                            index++;
-                     } catch (Exception e) {
-                            hasFailed("INVALID: DIGITS EXPECTED!" + "\n >   " + e);
-                     }
-                     
-              }
-
-              return result;
-       }
+       
+       public static ArrayList<Double> numbers = new ArrayList<Double>();
+       public static ArrayList<String> operations = new ArrayList<String>();
+       
+       public static String calculatorInput = new String();
+       
        
        public static void hasFailed(String textToDisplay) {
-    	   hasFailed = true;
-    	   System.out.println(textToDisplay);
+    	   System.out.println("ERROR : " + textToDisplay);
+       }
+       
+       
+       public static void printResult(double result) {
+    	   DecimalFormat df = new DecimalFormat("###.###");
+    	   System.out.println(": " +  df.format(result));
+       }
+       public static void printResult(String result) {
+    	   System.out.println(": " + result);
        }
 
        public static String derivative(String input) {
@@ -119,36 +67,79 @@ public class Calculator {
               return result;
        }
        
-       public static String runOperations(String input) {
-    	   String output = ": " + input;
+       public static void arithmetic() {
+    	   double result = numbers.get(0);
     	   
-    	    if (input.startsWith("d/d")) {
-	               output = derivative(input);
-	        }
-	        else {
-	               output = String.valueOf(operation(input));     
-	        }
-	        
-	        if (hasFailed) {
-	               System.out.println();
-	        }
-	        else {
-	               System.out.println(output);
-	               System.out.println();
-	        }
-	        hasFailed = false;
-	
-	        calculatorInput();
-	        
-    	    return output;
-       }
+    	   int index = 1;
+    	   for (String operation : operations) {
+    		   try {
+    			   switch (operation) {
+	    		   case ("+"):
+	    			   result += numbers.get(index);
+	    			   break;
+	    		   case ("-"):
+	    			   result -= numbers.get(index);
+	    			   break;
+	    		   case ("*"):
+	    			   result *= numbers.get(index); 
+	    			   break;
+	    		   case "/":
+	    			   result /= numbers.get(index); 
+	    			   break;
+	    		   case "^":
+	    			   result = Math.pow(result, numbers.get(index)); 
+	    			   break;
+	    		   default:
+	    			   hasFailed("UNKNOWN OPERATION");
+    			   }
+    		   }
+    		   catch (IndexOutOfBoundsException e) {
+    			   hasFailed("MALFORMED QUERY");
+    			   index++;
+    		   }
+    		   
+    		   index++;
+    	   }
 
+    	   printResult(result);
+    	   calculatorInput();
+       }
+       
+
+
+       public static void formOperatorsAndNumbers(String input) {
+    	   numbers.clear();
+           operations.clear();
+    	   
+    	   String[] blocks = input.split(" ");
+    	   
+    	   for (String block : blocks) {
+	           	try {
+	           		numbers.add(Double.parseDouble(block));	           		
+	           	}
+	           	catch (NumberFormatException e) {
+	           		operations.add(block);
+	           	}
+           }
+       }
+       
+       public static void chooseCalculation(String input) {
+           if (input.startsWith("d/d")) {
+        	   printResult(derivative(input));
+        	   calculatorInput();
+           }
+           else {
+        	   formOperatorsAndNumbers(input);
+        	   arithmetic();
+           }
+       }
+       
        public static void calculatorInput() {
               Scanner in = new Scanner(System.in);
-              String input = in.nextLine();
-
-              if (!input.toLowerCase().equals("quit")) {
-            	  runOperations(input);
+              calculatorInput = in.nextLine();
+              
+              if (!calculatorInput.toLowerCase().equals("quit")) {
+            	  chooseCalculation(calculatorInput);
               }
               else{
                      in.close();
@@ -156,6 +147,7 @@ public class Calculator {
        }
 
        public static void main(String[] args) {
+    	   System.out.println("Arithmetic and Derivation Calculator. All numbers and operators must be seperated with a space.");
      	   calculatorInput();
        }
 }
