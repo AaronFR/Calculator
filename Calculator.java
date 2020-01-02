@@ -65,28 +65,29 @@ public class Calculator {
                             }
                             index++;
                      } catch (Exception e) {
-                            hasFailed = true;
-                            System.out.println(
-                                   "INVALID: DIGITS EXPECTED!" +
-                                   " >   " + e
-                            );
+                            hasFailed("INVALID: DIGITS EXPECTED!" + "\n >   " + e);
                      }
                      
               }
 
               return result;
        }
+       
+       public static void hasFailed(String textToDisplay) {
+    	   hasFailed = true;
+    	   System.out.println(textToDisplay);
+       }
 
        public static String derivative(String input) {
-              String result = new String();
-
               String[] variableBlocks = input.split("d\\/d");
               String[] variableStatements = variableBlocks[1].split(" ");
               String variable = variableStatements[0];
               String[] terms = variableStatements[1].split(variable);
 
+              String result = new String();
               Double constant = Double.valueOf(terms[0]);
               boolean isConstant = false;
+              
               if (terms.length == 1){
                      if (variableStatements[1].endsWith(variable)) {
                             return String.valueOf(constant);
@@ -112,43 +113,49 @@ public class Calculator {
                      
               }
               else {
-                     hasFailed = true;
-                     System.out.println("EXPONENT NOT FOUND");
+            	  	hasFailed("EXPONENT NOT FOUND");
               }
 
               return result;
+       }
+       
+       public static String runOperations(String input) {
+    	   String output = ": " + input;
+    	   
+    	    if (input.startsWith("d/d")) {
+	               output = derivative(input);
+	        }
+	        else {
+	               output = String.valueOf(operation(input));     
+	        }
+	        
+	        if (hasFailed) {
+	               System.out.println();
+	        }
+	        else {
+	               System.out.println(output);
+	               System.out.println();
+	        }
+	        hasFailed = false;
+	
+	        calculatorInput();
+	        
+    	    return output;
        }
 
        public static void calculatorInput() {
               Scanner in = new Scanner(System.in);
               String input = in.nextLine();
-              String output = ": " + input;
 
               if (!input.toLowerCase().equals("quit")) {
-                     if (input.startsWith("d/d")) {
-                            output = derivative(input);
-                     }
-                     else {
-                            output = String.valueOf(operation(input));     
-                     }
-                     
-                     if (hasFailed) {
-                            System.out.println();
-                     }
-                     else {
-                            System.out.println(output);
-                            System.out.println();
-                     }
-                     hasFailed = false;
-
-                     calculatorInput();
+            	  runOperations(input);
               }
               else{
                      in.close();
               }
        }
-    
+
        public static void main(String[] args) {
-              calculatorInput();
+     	   calculatorInput();
        }
 }
